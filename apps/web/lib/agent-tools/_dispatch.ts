@@ -24,6 +24,10 @@
  */
 
 import type { HandlerContext, HandlerResult } from "@nexus/identity-and-access";
+import { handleCheckLicenseRenewalStatus } from "./check_license_renewal_status";
+import { handleClassifyConciergeIntent } from "./classify_concierge_intent";
+import { handleGenerateItineraryOptions } from "./generate_itinerary_options";
+import { handleGenerateRegulatoryDisclosure } from "./generate_regulatory_disclosure";
 
 type Args = Record<string, unknown>;
 
@@ -31,5 +35,9 @@ export const DOMAIN_DISPATCH: Record<
   string,
   (ctx: HandlerContext, args: Args) => Promise<HandlerResult>
 > = {
-  // Build agent appends entries here per CTO-declared new_domain_tool.
+  check_license_renewal_status: (ctx, a) => handleCheckLicenseRenewalStatus(ctx, a),
+  classify_concierge_intent: (ctx, a) => handleClassifyConciergeIntent(ctx, a),
+  generate_itinerary_options: (ctx, a) => handleGenerateItineraryOptions(ctx, a),
+  generate_regulatory_disclosure: (ctx, a) => handleGenerateRegulatoryDisclosure(ctx, a),
 };
+
