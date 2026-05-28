@@ -41,7 +41,7 @@ function getPool(): {
 async function listTravelers(): Promise<TravelerRow[]> {
   try {
     const pool = getPool();
-    const result = await pool.query<TravelerRow>(
+    const result = await pool.query(
       `SELECT
          id,
          booking_id,
