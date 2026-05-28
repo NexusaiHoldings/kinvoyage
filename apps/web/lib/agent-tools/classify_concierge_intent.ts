@@ -149,11 +149,11 @@ export const handleClassifyConciergeIntent = async (
   const parsedArgs = ArgsSchema.safeParse(rawArgs);
   if (!parsedArgs.success) {
     return {
-      status: "error",
-      error: {
+      status: 400,
+      body: {
         type: "invalid_arguments",
         message: "Invalid arguments supplied to classify_concierge_intent.",
-        details: parsedArgs.error.flatten(),
+        details: parsedArgs.error.flatten() as Record<string, unknown>,
       },
     };
   }
@@ -182,8 +182,8 @@ export const handleClassifyConciergeIntent = async (
   const rationale = buildRationale(classification, matchedKeywords);
 
   return {
-    status: "ok",
-    data: {
+    status: 200,
+    body: {
       classification,
       confidence,
       needs_escalation: needsEscalation,
