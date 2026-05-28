@@ -212,7 +212,7 @@ export async function getSupplierMarginSummaries(filters?: {
   `;
 
   const res = await pool.query(sql, params);
-  return res.rows.map((row: Record<string, unknown>) => ({
+  return (res.rows as Record<string, unknown>[]).map((row) => ({
     supplier_id: String(row.supplier_id),
     supplier_name: String(row.supplier_name),
     supplier_type: row.supplier_type as SupplierType,
