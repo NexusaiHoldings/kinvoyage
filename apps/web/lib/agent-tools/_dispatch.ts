@@ -24,6 +24,7 @@
  */
 
 import type { HandlerContext, HandlerResult } from "@nexus/identity-and-access";
+import { handleCheckLicenseRenewalStatus } from "./check_license_renewal_status";
 import { handleClassifyConciergeIntent } from "./classify_concierge_intent";
 import { handleGenerateItineraryOptions } from "./generate_itinerary_options";
 import { handleGenerateRegulatoryDisclosure } from "./generate_regulatory_disclosure";
@@ -34,6 +35,7 @@ export const DOMAIN_DISPATCH: Record<
   string,
   (ctx: HandlerContext, args: Args) => Promise<HandlerResult>
 > = {
+  check_license_renewal_status: (ctx, a) => handleCheckLicenseRenewalStatus(ctx, a),
   classify_concierge_intent: (ctx, a) => handleClassifyConciergeIntent(ctx, a),
   generate_itinerary_options: (ctx, a) => handleGenerateItineraryOptions(ctx, a),
   generate_regulatory_disclosure: (ctx, a) => handleGenerateRegulatoryDisclosure(ctx, a),
