@@ -169,11 +169,27 @@ export async function fetchExpiringLicenses(withinDays: number): Promise<Expirin
 }
 
 export async function fetchComplianceDashboard(): Promise<ComplianceDashboardData> {
-  const [licenses, accreditations, trustAccounts, disclosureRates] = await Promise.all([
+  // Hotfix 2026-05-28: Promise.allSettled instead of Promise.all so a missing
+  // table (compliance schema not yet migrated) returns an empty array for
+  // that section rather than catastrophically rendering "Database may be
+  // unavailable" across the entire compliance dashboard. Failed sections
+  // log + degrade to empty; chairman can investigate per-section.
+  const [licensesR, accreditationsR, trustAccountsR, disclosureRatesR] = await Promise.allSettled([
     fetchLicenses(),
     fetchAccreditations(),
     fetchTrustAccountStatus(),
     fetchDisclosureAcknowledgmentRates(),
   ]);
-  return { licenses, accreditations, trustAccounts, disclosureRates, fetchedAt: new Date().toISOString() };
+  const unwrap = <T>(r: PromiseSettledResult<T[]>, label: string): T[] => {
+    if (r.status === "fulfilled") return r.value;
+    console.error(`compliance: ${label} fetch failed:`, r.reason);
+    return [];
+  };
+  return {
+    licenses: unwrap(licensesR, "licenses"),
+    accreditations: unwrap(accreditationsR, "accreditations"),
+    trustAccounts: unwrap(trustAccountsR, "trustAccounts"),
+    disclosureRates: unwrap(disclosureRatesR, "disclosureRates"),
+    fetchedAt: new Date().toISOString(),
+  };
 }

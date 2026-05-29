@@ -1,3 +1,10 @@
+/* Hotfix 2026-05-28: substrate didn't ship Tailwind; agent-built pages used
+   utility classes that compiled to no CSS. These directives let Tailwind
+   process the `content:` glob in tailwind.config.ts. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Substrate global styles — minimal baseline. Per-company theming
    ships via packages/ui design tokens. */
 
